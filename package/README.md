@@ -6,7 +6,9 @@ This is an [Astro integration](https://docs.astro.build/en/guides/integrations-g
 
 ### Prerequisites
 
-TODO:
+The Only Requirement to install this package is a **Github account with a Varified Email** to be able to create a Personal Access Token.
+
+This Integration uses [`Octokit`](http://octokit.github.io/) by `GitHub` to Generate custom gists using [`ExpressiveCode`](https://expressive-code.com/) within your Astro project!
 
 ### Installation
 
@@ -43,18 +45,43 @@ yarn add @matthiesenxyz/astro-gists
 2. Add the integration to your astro config
 
 ```diff
-+import integration from "@matthiesenxyz/astro-gists";
+import { defineConfig } from "astro/config";
++import astroGist from "@matthiesenxyz/astro-gists";
 
+
+// https://astro.build/config
 export default defineConfig({
-  integrations: [
-+    integration(),
-  ],
++  integrations: [astroGist()]
 });
 ```
 
 ### Configuration
 
-TODO:configuration
+Setup your `.env` file with the following secret from github:
+
+Github Personal Access Token (Classic) 
+ - No Special Permissions required 
+ - Octokit recommends creating an empty token for this!
+
+```dotenv
+GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
+```
+
+### Usage
+
+#### `<GetGist>`
+
+This Utility is meant to display Gists as Codeblocks using ExpressiveCode for Astro instead of Scripted Elements using the default Gist method
+
+```astro
+---
+import { GetGist } from "@matthiesenxyz/astro-gists/components"
+---
+<GetGist 
+	gistId="your-gist-id-here"
+	filename="name-of-desired-file-to-be-displayed.md" 
+/>
+```
 
 ## Licensing
 
@@ -62,4 +89,5 @@ TODO:configuration
 
 ## Acknowledgements
 
-TODO:
+- [`Octokit`](http://octokit.github.io) by GitHub
+- [`Expressive-Code`](https://expressive-code.com/) By Hippotasic
