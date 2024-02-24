@@ -89,5 +89,5 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 
 ## Acknowledgements
 
-[`Octokit`](http://octokit.github.io) by GitHub
-[`Expressive-Code`](https://expressive-code.com/) By Hippotasic
+- [`Octokit`](http://octokit.github.io) by GitHub
+- [`Expressive-Code`](https://expressive-code.com/) By Hippotasic
