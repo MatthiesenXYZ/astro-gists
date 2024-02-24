@@ -1,6 +1,6 @@
-# `package-name`
+# `Astro-Gists`
 
-This is an [Astro integration](https://docs.astro.build/en/guides/integrations-guide/) that TODO:description
+This is an [Astro integration](https://docs.astro.build/en/guides/integrations-guide/) that allows the user to import GitHub Gists by ID through an Astro Component and Octokit
 
 ## Usage
 
@@ -13,15 +13,15 @@ TODO:
 Install the integration **automatically** using the Astro CLI:
 
 ```bash
-pnpm astro add package-name
+pnpm astro add @matthiesenxyz/astro-gists
 ```
 
 ```bash
-npx astro add package-name
+npx astro add @matthiesenxyz/astro-gists
 ```
 
 ```bash
-yarn astro add package-name
+yarn astro add @matthiesenxyz/astro-gists
 ```
 
 Or install it **manually**:
@@ -29,21 +29,21 @@ Or install it **manually**:
 1. Install the required dependencies
 
 ```bash
-pnpm add package-name
+pnpm add @matthiesenxyz/astro-gists
 ```
 
 ```bash
-npm install package-name
+npm install @matthiesenxyz/astro-gists
 ```
 
 ```bash
-yarn add package-name
+yarn add @matthiesenxyz/astro-gists
 ```
 
 2. Add the integration to your astro config
 
 ```diff
-+import integration from "package-name";
++import integration from "@matthiesenxyz/astro-gists";
 
 export default defineConfig({
   integrations: [
@@ -56,30 +56,9 @@ export default defineConfig({
 
 TODO:configuration
 
-## Contributing
-
-This package is structured as a monorepo:
-
-- `playground` contains code for testing the package
-- `package` contains the actual package
-
-Install dependencies using pnpm: 
-
-```bash
-pnpm i --frozen-lockfile
-```
-
-Start the playground:
-
-```bash
-pnpm playground:dev
-```
-
-You can now edit files in `package`. Please note that making changes to those files may require restarting the playground dev server.
-
 ## Licensing
 
-[MIT Licensed](https://github.com/TODO:/blob/main/LICENSE). Made with ❤️ by [TODO:](https://github.com/TODO:).
+[MIT Licensed](./LICENSE). Made with ❤️ by [AdamMatthiesen](https://github.com/AdamMatthiesen) Under [MatthiesenXYZ](https://github.com/MatthiesenXYZ).
 
 ## Acknowledgements
 

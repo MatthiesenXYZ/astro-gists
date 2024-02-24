@@ -1,8 +1,8 @@
 import tailwind from "@astrojs/tailwind";
 import { defineConfig } from "astro/config";
-import packageName from "package-name";
+import integration from "@matthiesenxyz/astro-gists";
 
 // https://astro.build/config
 export default defineConfig({
-	integrations: [tailwind(), packageName()],
+	integrations: [tailwind(), integration()],
 });
