@@ -63,7 +63,7 @@ Github Personal Access Token (Classic)
  - No Special Permissions required 
  - Octokit recommends creating an empty token for this!
 
-```
+```dotenv
 GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
 ```
 
@@ -73,6 +73,7 @@ GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
 
 This Utility is meant to display Gists as Codeblocks using ExpressiveCode for Astro instead of Scripted Elements using the default Gist method
 
+```astro
 ---
 import { GetGist } from "@matthiesenxyz/astro-gists/components"
 ---
@@ -80,6 +81,7 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 	gistId="your-gist-id-here"
 	filename="name-of-desired-file-to-be-displayed.md" 
 />
+```
 
 ## Licensing
 
