@@ -1,8 +1,15 @@
-import type { AstroIntegration } from "astro";
+import { defineIntegration, createResolver } from "astro-integration-kit"
+import { corePlugins } from "astro-integration-kit/plugins"
 
-export const integration = (): AstroIntegration => {
+export default defineIntegration({
+  name: "@matthiesenxyz/astro-gists",
+  plugins: [...corePlugins],
+  setup() {
+	const { resolve } = createResolver(import.meta.url);
 	return {
-		name: "@matthiesenxyz/astro-gists",
-		hooks: {},
-	};
-};
+	  "astro:config:setup": ({ watchIntegration }) => {
+		watchIntegration(resolve())
+	  }
+	}
+  }
+})
