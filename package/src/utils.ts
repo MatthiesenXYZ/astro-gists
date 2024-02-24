@@ -26,3 +26,12 @@ export const getGistFile = async (
   return null;
 };
 
+export const getGistGroup = async (
+  gistId: string
+  ) => {
+const gist = await getGist(gistId);
+if (gist?.files) {
+  return gist ? gist : null;
+}
+return null;
+};
