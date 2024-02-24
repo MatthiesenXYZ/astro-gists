@@ -1,11 +1,11 @@
 {
-  "name": "package-name",
+  "name": "@matthiesenxyz/astro-gists",
   "version": "0.0.0",
   "description": "TODO:",
   "author": {
-    "email": "TODO:",
-    "name": "TODO:",
-    "url": "TODO:"
+    "email": "adam@matthiesen.xyz",
+    "name": "Adam Matthiesen",
+    "url": "https://matthiesen.xyz"
   },
   "license": "MIT",
   "keywords": [
@@ -13,9 +13,11 @@
     "astro-component",
     "withastro",
     "astro",
-    "TODO:"
+    "github",
+    "gist",
+    "octokit"
   ],
-  "homepage": "TODO:",
+  "homepage": "https://github.com/MatthiesenXYZ/astro-gists",
   "publishConfig": {
     "access": "public"
   },
