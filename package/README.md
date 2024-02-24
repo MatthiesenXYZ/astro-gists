@@ -2,11 +2,15 @@
 
 This is an [Astro integration](https://docs.astro.build/en/guides/integrations-guide/) that allows the user to import GitHub Gists by ID through an Astro Component and Octokit
 
+## Example
+
+![Example of AstroGists in use](./src/assets/example.png)
+
 ## Usage
 
 ### Prerequisites
 
-The Only Requirement to install this package is a **Github account with a Varified Email** to be able to create a Personal Access Token.
+The Only Requirement to install this package is a **Github account with a Verified Email** to be able to create a Personal Access Token.
 
 This Integration uses [`Octokit`](http://octokit.github.io/) by `GitHub` to Generate custom gists using [`ExpressiveCode`](https://expressive-code.com/) within your Astro project!
 
@@ -83,6 +87,27 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 />
 ```
 
+## Contributing
+
+This package is structured as a monorepo:
+
+- `playground` contains code for testing the package
+- `package` contains the actual package
+
+Install dependencies using pnpm: 
+
+```bash
+pnpm i --frozen-lockfile
+```
+
+Start the playground:
+
+```bash
+pnpm playground:dev
+```
+
+You can now edit files in `package`. Please note that making changes to those files may require restarting the playground dev server.
+
 ## Licensing
 
 [MIT Licensed](./LICENSE). Made with ❤️ by [AdamMatthiesen](https://github.com/AdamMatthiesen) Under [MatthiesenXYZ](https://github.com/MatthiesenXYZ).
@@ -91,3 +116,4 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 
 - [`Octokit`](http://octokit.github.io) by GitHub
 - [`Expressive-Code`](https://expressive-code.com/) By Hippotasic
+- [`astro-integration-kit`](https://github.com/florian-lefebvre/astro-integration-kit) by Florian
