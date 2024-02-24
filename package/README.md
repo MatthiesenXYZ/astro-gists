@@ -73,9 +73,9 @@ GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
 
 ### Usage
 
-#### `<GetGist>`
+#### `<GetGist>` Shows a SINGLE gist from a GistCollection
 
-This Utility is meant to display Gists as Codeblocks using ExpressiveCode for Astro instead of Scripted Elements using the default Gist method
+This Utility is meant to display a single Gist as Codeblocks using ExpressiveCode for Astro instead of Scripted Elements using the default Gist method by calling the ID and Filename
 
 ```astro
 ---
@@ -84,6 +84,18 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 <GetGist 
 	gistId="your-gist-id-here"
 	filename="name-of-desired-file-to-be-displayed.md" 
+/>
+```
+
+#### `<GetGistGroup>` Shows all of the Gists from a GistCollection
+
+This Utility is meant to display an entire collection of Gists by ID
+
+```astro
+import { GetGistGroup } from "@matthiesenxyz/astro-gists/components"
+
+<GetGistGroup 
+	gistId="your-gist-id-here"
 />
 ```
 

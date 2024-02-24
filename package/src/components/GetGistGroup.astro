@@ -1,0 +1,52 @@
+---
+import { getGistGroup } from "../utils"
+import { GetGist } from "./index"
+
+export interface Props {
+    /** REQUIRED: Used to define the desired GitHub Gist ID */
+    gistId: string;
+    /** OPTIONAL: Allows the user to Enable and Disable LineNumbers
+     * @default true
+     */
+    showLineNumbers?: boolean;
+    /** OPTIONAL: Allows the user to Enable and Disable LineWrapping
+     * @default true
+     */
+    wrap?: boolean;
+}
+
+const { gistId, showLineNumbers, wrap } = Astro.props as Props;
+
+const SHOWLINENUMBERS = showLineNumbers ? showLineNumbers : showLineNumbers == undefined ? true : false;
+const WRAP = wrap ? wrap : wrap == undefined ? true : false;
+
+const Gist = await getGistGroup(gistId);
+const files = Gist?.files;
+
+const filed = Object.keys(files as object);
+
+
+
+---
+{ Gist && (
+    <div class="gist">
+        { filed.map((file) => (
+            <div class="gist">
+                <GetGist 
+                    gistId={gistId} 
+                    filename={file} 
+                    showLineNumbers={SHOWLINENUMBERS} 
+                    wrap={WRAP} 
+                />
+            </div>
+        ))}
+    </div>
+) }
+
+
+<style>
+    .gist {
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+</style>
