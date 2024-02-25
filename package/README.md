@@ -92,8 +92,9 @@ import { GetGist } from "@matthiesenxyz/astro-gists/components"
 This Utility is meant to display an entire collection of Gists by ID
 
 ```astro
+---
 import { GetGistGroup } from "@matthiesenxyz/astro-gists/components"
-
+---
 <GetGistGroup 
 	gistId="your-gist-id-here"
 />
