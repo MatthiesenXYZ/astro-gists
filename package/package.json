@@ -45,10 +45,11 @@
     "astro": "^4.4.0"
   },
   "dependencies": {
-    "@octokit/types": "^12.6.0",
+    "@astrojs/mdx": "2.1.1",
     "@expressive-code/plugin-line-numbers": "^0.33.4",
-    "astro-integration-kit": "^0.3.0",
+    "@octokit/types": "^12.6.0",
     "astro-expressive-code": "^0.33.4",
+    "astro-integration-kit": "^0.4.0",
     "octokit": "^3.1.2",
     "vite": "^5.1.4"
   }

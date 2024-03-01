@@ -52,10 +52,11 @@ yarn add @matthiesenxyz/astro-gists
 import { defineConfig } from "astro/config";
 +import astroGist from "@matthiesenxyz/astro-gists";
 
-
 // https://astro.build/config
 export default defineConfig({
-+  integrations: [astroGist()]
++  integrations: [astroGist({
++	MDXIntegration: true // This is the default option and will enable or disable @astrojs/mdx
++  })]
 });
 ```
 
@@ -70,6 +71,8 @@ Github Personal Access Token (Classic)
 ```dotenv
 GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
 ```
+
+*Note: Without this token, you will be HEAVILY limited by quantity of requests made with Octokit.*
 
 ### Usage
 
@@ -129,4 +132,5 @@ You can now edit files in `package`. Please note that making changes to those fi
 
 - [`Octokit`](http://octokit.github.io) by GitHub
 - [`Expressive-Code`](https://expressive-code.com/) By Hippotasic
+- [`@astrojs/mdx`](https://docs.astro.build/en/guides/integrations-guide/mdx/) by withAstro
 - [`astro-integration-kit`](https://github.com/florian-lefebvre/astro-integration-kit) by Florian
