@@ -34,8 +34,8 @@ export default defineIntegration({
 
 	return {
 	  "astro:config:setup": ({ 
-		watchIntegration, hasIntegration, addIntegration,
-		updateConfig, logger
+		watchIntegration, hasIntegration,
+		updateConfig, logger, config
 	}) => {
 		logger.info("Setting up Astro Gists Integration.")
 		const configSetup = logger.fork("astro-gists/config:setup")
@@ -48,12 +48,13 @@ export default defineIntegration({
 			configSetup.warn("GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.")
 		}
 
+		// CHECK FOR EXISTING INTEGRATIONS
+		const integrations = [...config.integrations]
+
 		// ADD ExpressiveCode INTEGRATION
 		if (!hasIntegration("astro-expressive-code")) {
 			configSetup.info("Loading Astro Gists Expressive Code Integration.")
-			updateConfig({
-				integrations: [...astroGistsExpressiveCode()]
-			})
+			integrations.push(...astroGistsExpressiveCode())
 		} else {
 			configSetup.info("Astro Expressive Code Integration already loaded.")
 		}
@@ -64,7 +65,7 @@ export default defineIntegration({
 		}
 		if (options.MDXIntegration && !hasIntegration("@astrojs/mdx")) {
 			configSetup.info("Loading @astrojs/mdx Integration.")
-			addIntegration(mdx(), { ensureUnique: true })
+			integrations.push(mdx())
 		}
 		if (!options.MDXIntegration) {
 			configSetup.info("Internal MDX Integration Disabled. Skipping...")
