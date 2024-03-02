@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.1.1
+
+### Patch Changes
+
+- a27111a: update mdx integration config, as well as impliment ratelimit checks on Octokit with logs!
+
 ## 0.1.0
 
 ### Minor Changes
