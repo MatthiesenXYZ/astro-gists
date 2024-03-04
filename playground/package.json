@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@matthiesenxyz/astro-gists": "*",
-    "astro": "^4.4.4"
+    "astro": "^4.4.9"
   },
   "devDependencies": {
     "@astrojs/check": "^0.5.5",
