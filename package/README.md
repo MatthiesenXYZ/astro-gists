@@ -76,7 +76,9 @@ Github Personal Access Token (Classic)
 GITHUB_PERSONAL_TOKEN=ghp_YOURPERSONALTOKENHERE
 ```
 
-*Note: Without this token, you will be HEAVILY limited by quantity of requests made with Octokit.*
+*Note: Without this token, you will be HEAVILY limited by quantity of requests made with Octokit. (Unauthorized Octokit Instances are limited to 60 requests per hour)*
+
+*Note: It is recommended to use this Integration in SSG(Static Site) mode only(or enable prerendering for pages with Gists), as in SSR(Server Rendered) mode that could overload your Octokit request limit quite fast.  Keep in mind for each Gist/Gists request made that counts twords your global limit.(60 requests per hour for unauthorized Octokit, 5,000 requests per hour for personal access tokens, and if using a GitHub App by Under GitHub Enterprise Cloud is 15,000+) see [GitHub Docs](https://docs.github.com/en/rest/using-the-rest-api/rate-limits-for-the-rest-api?apiVersion=2022-11-28#primary-rate-limit-for-authenticated-users)*
 
 ### Usage
 
