@@ -1,5 +1,19 @@
 # @matthiesenxyz/astro-gists
 
+## 0.1.2
+
+### Patch Changes
+
+- fae83c2: Update:
+
+  - Update Readme to reflect potential Octokit issues in SSR as per [Issue #15](https://github.com/MatthiesenXYZ/astro-gists/issues/15)
+
+  Bump dependencies:
+
+  - astro-integration-kit from to
+  - vite from to
+  - astro from to
+
 ## 0.1.1
 
 ### Patch Changes
