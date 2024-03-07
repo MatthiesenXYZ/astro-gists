@@ -57,9 +57,7 @@ import { defineConfig } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
 +  integrations: [astroGist({
-	// OPTIONAL CONFIG OPTIONS
-	// Enable the Astrojs/MDX Integration - Default: true
-	MDXIntegration: true 
+	theme: 'github-dark' // OPTIONAL, if not set defaults to Astro's Houston, Only Available options are Shiki Bundled options
 +  })]
 });
 ```
@@ -89,6 +87,8 @@ This Utility is meant to display a single Gist as Codeblocks using ExpressiveCod
 ```astro
 ---
 import { GetGist } from "@matthiesenxyz/astro-gists/components"
+// OR
+import GetGist from "@matthiesenxyz/astro-gists/GetGist"
 ---
 <GetGist 
 	gistId="your-gist-id-here"
@@ -103,6 +103,8 @@ This Utility is meant to display an entire collection of Gists by ID
 ```astro
 ---
 import { GetGistGroup } from "@matthiesenxyz/astro-gists/components"
+// OR
+import GetGistGroup from "@matthiesenxyz/astro-gists/GetGistGroup"
 ---
 <GetGistGroup 
 	gistId="your-gist-id-here"

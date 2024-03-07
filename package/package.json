@@ -31,25 +31,21 @@
   "sideEffects": false,
   "exports": {
     ".": "./src/index.ts",
-    "./expressive-code": {
-      "types": "./expressive-code.d.ts",
-      "default": "./expressive-code.mjs"
-    },
-    "./internal": "./internal.ts",
     "./components": "./src/components/index.ts",
-    "./components/*": "./src/components/*"
+    "./GetGist": "./src/components/GetGist.astro",
+    "./GetGistGroup": "./src/components/GetGistGroup.astro"
   },
   "scripts": {},
   "type": "module",
   "peerDependencies": {
-    "astro": "^4.4.0"
+    "astro": "^4.4.1"
   },
   "dependencies": {
-    "@astrojs/mdx": "2.1.1",
     "@expressive-code/plugin-line-numbers": "^0.33.4",
     "@octokit/types": "^12.6.0",
-    "astro-expressive-code": "^0.33.4",
     "astro-integration-kit": "^0.5.1",
+    "expressive-code": "^0.33.4",
+    "hast-util-to-html": "^8.0.4",
     "octokit": "^3.1.2",
     "vite": "^5.1.5"
   }

@@ -1,12 +1,22 @@
 import { defineIntegration, createResolver } from "astro-integration-kit"
 import { corePlugins } from "astro-integration-kit/plugins"
-import { astroGistsExpressiveCode } from "./integrations/expressive-code"
 import { z } from "astro/zod";
-import mdx from "@astrojs/mdx";
 import { loadEnv } from "vite";
+import { type BundledShikiTheme } from 'expressive-code'
 
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
+
+export const optionsSchema = z.object({
+	/** 
+	 * Optional: Allows the user to change the default theme for the code blocks.
+	 * 
+	 * All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes).
+	 */
+	theme: z.custom<BundledShikiTheme>().optional(),
+  });
+
+export type UserConfig = z.infer<typeof optionsSchema>
 
 /** Astro-Gist - An Astro.js integration for embedding GitHub Gists in your Astro.js project.
  * @example
@@ -16,26 +26,23 @@ const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
  * export default defineConfig({
  *   integrations: [ 
  *     astroGist({
- *       // Enable the Astrojs/MDX Integration - Default: true
- *       MDXIntegration: true 
+ *       // Optional: Change the default theme for the code blocks. 
+ *       // Default: `Astro Houston (Custom)` If you want to use the default theme, you can omit this option. 
+ *       theme: "github-dark" 
  *     }) 
  *   ]
  * });
 */
 export default defineIntegration({
   name: "@matthiesenxyz/astro-gists",
-  optionsSchema: z.object({
-	/** Enables the astrojs/mdx Integration */
-	MDXIntegration: z.boolean().optional().default(true),
-  }),
+  optionsSchema,
   plugins: [...corePlugins],
   setup({ options }) {
 	const { resolve } = createResolver(import.meta.url)
 
 	return {
 	  "astro:config:setup": ({ 
-		watchIntegration, hasIntegration,
-		updateConfig, logger, config
+		watchIntegration, addVirtualImports, logger,
 	}) => {
 		logger.info("Setting up Astro Gists Integration.")
 		const configSetup = logger.fork("astro-gists/config:setup")
@@ -48,38 +55,11 @@ export default defineIntegration({
 			configSetup.warn("GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.")
 		}
 
-		// CHECK FOR EXISTING INTEGRATIONS
-		const integrations = [...config.integrations]
+		// Add virtual imports
+		addVirtualImports({
+			"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
+		});
 
-		// ADD ExpressiveCode INTEGRATION
-		if (!hasIntegration("astro-expressive-code")) {
-			configSetup.info("Loading Astro Gists Expressive Code Integration.")
-			integrations.push(...astroGistsExpressiveCode())
-		} else {
-			configSetup.info("Astro Expressive Code Integration already loaded.")
-		}
-
-		// ADD MDX INTEGRATION IF ENABLED
-		if (options.MDXIntegration && hasIntegration("@astrojs/mdx")) {
-			configSetup.warn("@astrojs/mdx Integration already loaded.In some cases this could cause issues. Please remove it from your astro.config.mjs file. as it will be added automatically.")
-		}
-		if (options.MDXIntegration && !hasIntegration("@astrojs/mdx")) {
-			configSetup.info("Loading @astrojs/mdx Integration.")
-			integrations.push(mdx())
-		}
-		if (!options.MDXIntegration) {
-			configSetup.info("Internal MDX Integration Disabled. Skipping...")
-		}
-
-		// UPDATE All integrations
-		try {
-			updateConfig({
-				integrations: [...astroGistsExpressiveCode(), mdx()]
-			})
-		} catch (e) {
-			logger.error(e as string);
-			throw `@matthiesenxyz/astro-gists: Unable to Update Integrations...\n${e}`;
-		}
 	  },
 	  "astro:config:done": ({ logger }) => {
 		const configDone = logger.fork("astro-gists/config:done")

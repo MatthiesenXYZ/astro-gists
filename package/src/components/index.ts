@@ -1,2 +1,2 @@
-export { default as GetGist} from "./GetGist.astro"
-export { default as GetGistGroup} from "./GetGistGroup.astro"
+export { default as GetGist} from "./GetGist.astro";
+export { default as GetGistGroup} from "./GetGistGroup.astro";
