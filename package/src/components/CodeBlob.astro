@@ -40,11 +40,9 @@ const { renderedGroupAst, styles } = await engine.render({
 let htmlContent = toHtml(renderedGroupAst)
 
 const stylesToPrepend: string[] = []
-const gistBaseStyles = baseStyles.replace(/\.expressive-code/g, '.gist .expressive-code')
-const gistThemeStyles = themeStyles.replace(/\.expressive-code/g, '.gist .expressive-code')
-stylesToPrepend.push(gistBaseStyles, gistThemeStyles, ...styles)
+stylesToPrepend.push(baseStyles, themeStyles, ...styles)
 if (stylesToPrepend.length) {
-  htmlContent = `<style>${[...stylesToPrepend].join('')}</style>${htmlContent}`
+  htmlContent = `<style>${[...stylesToPrepend].join('').replace(/\.expressive-code/g, '.gist .expressive-code')}</style>${htmlContent}`
 }
 
 const scriptsToPrepend: string[] = []
