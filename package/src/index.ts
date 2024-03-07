@@ -1,3 +1,3 @@
-import astroGist from "./integration.js";
+import astroGist from "./integration";
 
 export default astroGist;

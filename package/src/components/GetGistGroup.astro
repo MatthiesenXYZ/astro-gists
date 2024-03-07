@@ -1,6 +1,6 @@
 ---
 import { getGistGroup } from "../utils"
-import { GetGist } from "./index"
+import CodeBlob from "./CodeBlob.astro";
 
 export interface Props {
     /** REQUIRED: Used to define the desired GitHub Gist ID */
@@ -15,38 +15,28 @@ export interface Props {
     wrap?: boolean;
 }
 
-const { gistId, showLineNumbers, wrap } = Astro.props as Props;
+const { gistId, wrap, showLineNumbers } = Astro.props as Props;
 
-const SHOWLINENUMBERS = showLineNumbers ? showLineNumbers : showLineNumbers == undefined ? true : false;
 const WRAP = wrap ? wrap : wrap == undefined ? true : false;
+const SLN = showLineNumbers ? showLineNumbers : showLineNumbers == undefined ? true : false;
 
 const Gist = await getGistGroup(gistId);
-const files = Gist?.files;
 
-const filed = Object.keys(files as object);
-
-
-
+const files = Gist.files;
 ---
 { Gist && (
-    <div class="gist">
-        { filed.map((file) => (
-            <div class="gist">
-                <GetGist 
-                    gistId={gistId} 
-                    filename={file} 
-                    showLineNumbers={SHOWLINENUMBERS} 
-                    wrap={WRAP} 
+    <div>
+        {Object.keys(files).map((file) => {
+            const { content, filename, language, raw_url } = files[file];
+            return (
+                <CodeBlob
+                    title={filename} wrap={WRAP}
+                    code={content} raw_url={raw_url}
+                    lang={language.toLowerCase()} 
+                    showLineNumbers={SLN}
                 />
-            </div>
-        ))}
+            );
+        })}
     </div>
 ) }
 
-
-<style>
-    .gist {
-        padding-top: 1rem;
-        padding-bottom: 1rem;
-    }
-</style>
