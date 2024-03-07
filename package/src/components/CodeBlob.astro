@@ -4,6 +4,7 @@ import { ExpressiveCode, loadShikiTheme, type BundledShikiTheme, ExpressiveCodeT
 import { toHtml } from 'hast-util-to-html'
 import fs from 'node:fs'
 import config from "virtual:astro-gists/config";
+import { getPageData } from './page-data'
 
 const jsoncString = fs.readFileSync(new URL(`../themes/houston.jsonc`, import.meta.url), 'utf-8')
 const houston = ExpressiveCodeTheme.fromJSONString(jsoncString)
@@ -13,6 +14,12 @@ const theme = config.theme
 const { code, raw_url, locale,
 	lang = '',  meta = '', ...props 
   } = Astro.props
+
+	const pageData = getPageData(Astro.request)
+	// Note: It's important to store the incremented index in a local variable immediately,
+	// as the `pageData` object is shared between all components on the current page
+	// and can be changed by other Code components during the `await` calls below
+	const groupIndex = ++pageData.blockGroupIndex
 
 const engine = new ExpressiveCode({
 	themes: [theme ? await loadShikiTheme(theme as BundledShikiTheme) : houston],
@@ -24,12 +31,18 @@ const themeStyles = await engine.getThemeStyles();
 const jsModules = await engine.getJsModules();
 
 const { renderedGroupAst, styles } = await engine.render({
-	language: lang, meta, locale, code, props, })
+	language: lang, meta, locale, code,
+  parentDocument: {
+    positionInDocument: { groupIndex,},
+  },
+  props, })
 
 let htmlContent = toHtml(renderedGroupAst)
 
 const stylesToPrepend: string[] = []
-stylesToPrepend.push(baseStyles, themeStyles, ...styles)
+const gistBaseStyles = baseStyles.replace(/\.expressive-code/g, '.gist .expressive-code')
+const gistThemeStyles = themeStyles.replace(/\.expressive-code/g, '.gist .expressive-code')
+stylesToPrepend.push(gistBaseStyles, gistThemeStyles, ...styles)
 if (stylesToPrepend.length) {
   htmlContent = `<style>${[...stylesToPrepend].join('')}</style>${htmlContent}`
 }
