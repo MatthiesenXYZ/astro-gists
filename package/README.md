@@ -14,8 +14,6 @@ The Only Requirement to install this package is a **Github account with a Verifi
 
 This Integration uses [`Octokit`](http://octokit.github.io/) by `GitHub` to Generate custom gists using [`ExpressiveCode`](https://expressive-code.com/) within your Astro project!
 
-This Integration currently includes `@astrojs/mdx` and is enabled by default.
-
 ### Installation
 
 Install the integration **automatically** using the Astro CLI:
