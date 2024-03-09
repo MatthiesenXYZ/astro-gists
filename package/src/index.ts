@@ -4,16 +4,16 @@ export default astroGist;
 
 // Export the user config schema
 import { z } from "astro/zod";
-import type { ShikiThemeOrBundledThemeName } from "./ExpressiveCode/theming"
+import type { BundledShikiTheme } from "expressive-code";
 
 export const optionsSchema = z.object({
 	/** 
 	 * Optional: Allows the user to change the default theme for the code blocks. 
-	 * @default ['astroGist-dark','astroGist-light']
+	 * @example ['github-dark']
 	 * 
 	 * All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes).
 	 */
-	theme: z.custom<ShikiThemeOrBundledThemeName[]>().optional(),
+	theme: z.custom<BundledShikiTheme>().optional(),
 });
 
 export type astroGistsUserConfig = z.infer<typeof optionsSchema>
