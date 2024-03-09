@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.6
+
+### Patch Changes
+
+- 18e132f: patch for css
+
 ## 0.2.5
 
 ### Patch Changes
