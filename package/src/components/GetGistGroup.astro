@@ -1,6 +1,6 @@
 ---
-import { getGistGroup } from "../utils"
-import CodeBlob from "./CodeBlob.astro";
+import { getGistGroup } from "../lib"
+import { Code } from "../ExpressiveCode";
 
 export interface Props {
     /** REQUIRED: Used to define the desired GitHub Gist ID */
@@ -29,7 +29,7 @@ const files = Gist.files;
         {Object.keys(files).map((file) => {
             const { content, filename, language, raw_url } = files[file];
             return (
-                <CodeBlob
+                <Code
                     title={filename} wrap={WRAP}
                     code={content} raw_url={raw_url}
                     lang={language.toLowerCase()} 

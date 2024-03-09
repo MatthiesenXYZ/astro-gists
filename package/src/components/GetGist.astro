@@ -1,6 +1,6 @@
 ---
-import { getGistFile } from "../utils"
-import CodeBlob from "./CodeBlob.astro"
+import { getGistFile } from "../lib"
+import { Code } from "../ExpressiveCode"
 
 export interface Props {
     /** REQUIRED: Used to define the desired GitHub Gist ID */
@@ -26,7 +26,7 @@ const Gist = await getGistFile( gistId, filename);
 
 ---
 { Gist && 
-	<CodeBlob
+	<Code
         wrap={WRAP} showLineNumbers={SLN}
         title={Gist.filename} raw_url={Gist.raw_url}
         code={ Gist.content ?  Gist.content : "" } 

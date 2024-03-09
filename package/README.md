@@ -55,7 +55,8 @@ import { defineConfig } from "astro/config";
 // https://astro.build/config
 export default defineConfig({
 +  integrations: [astroGist({
-	theme: 'github-dark' // OPTIONAL, if not set defaults to Astro's Houston, Only Available options are Shiki Bundled options
+	// This is the default options shown... dark is Astro's Houston-dark, and light is currently nightowl-light until a Houston-light is released.
+	theme: ['astroGists-dark', 'astroGists-light']
 +  })]
 });
 ```
