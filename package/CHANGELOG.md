@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.5
+
+### Patch Changes
+
+- e500aeb: fix CSS issue with View Raw Button
+
 ## 0.2.4
 
 ### Patch Changes
