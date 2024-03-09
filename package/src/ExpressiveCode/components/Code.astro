@@ -1,35 +1,31 @@
 ---
-import { pluginLineNumbers } from '@expressive-code/plugin-line-numbers'
-import { ExpressiveCode, loadShikiTheme, type BundledShikiTheme, ExpressiveCodeTheme } from 'expressive-code'
 import { toHtml } from 'hast-util-to-html'
-import fs from 'node:fs'
-import config from "virtual:astro-gists/config";
-import { getPageData } from './page-data'
+import { getPageData } from './page-data';
+import { engine } from '../index'
 
-const jsoncString = fs.readFileSync(new URL(`../themes/houston.jsonc`, import.meta.url), 'utf-8')
-const houston = ExpressiveCodeTheme.fromJSONString(jsoncString)
-
-const theme = config.theme
-
-const { code, raw_url, locale,
-	lang = '',  meta = '', ...props 
+// Extract the code and other props from the Astro component
+const { 
+  code, 
+  raw_url, 
+  locale,
+	lang = '', 
+  meta = '', 
+  ...props 
   } = Astro.props
 
-	const pageData = getPageData(Astro.request)
-	// Note: It's important to store the incremented index in a local variable immediately,
-	// as the `pageData` object is shared between all components on the current page
-	// and can be changed by other Code components during the `await` calls below
-	const groupIndex = ++pageData.blockGroupIndex
+// Get the current block group index from the page data
+const pageData = getPageData(Astro.request)
+// Note: It's important to store the incremented index in a local variable immediately,
+// as the `pageData` object is shared between all components on the current page
+// and can be changed by other Code components during the `await` calls below
+const groupIndex = ++pageData.blockGroupIndex
 
-const engine = new ExpressiveCode({
-	themes: [theme ? await loadShikiTheme(theme as BundledShikiTheme) : houston],
-	plugins: [pluginLineNumbers()],
-})
-
+// Get the base and theme styles, and the JS modules from the ExpressiveCode engine
 const baseStyles = await engine.getBaseStyles();
 const themeStyles = await engine.getThemeStyles();
 const jsModules = await engine.getJsModules();
 
+// Render the code using the ExpressiveCode engine
 const { renderedGroupAst, styles } = await engine.render({
 	language: lang, meta, locale, code,
   parentDocument: {
@@ -37,14 +33,17 @@ const { renderedGroupAst, styles } = await engine.render({
   },
   props, })
 
+// Convert the rendered group AST to HTML
 let htmlContent = toHtml(renderedGroupAst)
 
+// Prepend the base and theme styles to the HTML content
 const stylesToPrepend: string[] = []
 stylesToPrepend.push(baseStyles, themeStyles, ...styles)
 if (stylesToPrepend.length) {
   htmlContent = `<style>${[...stylesToPrepend].join('').replace(/\.expressive-code/g, '.gist .expressive-code')}</style>${htmlContent}`
 }
 
+// Prepend the JS modules to the HTML content
 const scriptsToPrepend: string[] = []
 scriptsToPrepend.push(...jsModules)
 if (scriptsToPrepend.length) {

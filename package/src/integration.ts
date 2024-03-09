@@ -1,37 +1,10 @@
 import { defineIntegration, createResolver } from "astro-integration-kit"
 import { corePlugins } from "astro-integration-kit/plugins"
-import { z } from "astro/zod";
-import { loadEnv } from "vite";
-import { type BundledShikiTheme } from 'expressive-code'
+import { isThereAToken, TOKEN_MISSING_ERROR } from "./lib"
+import { optionsSchema } from "./index"
 
-// Load environment variables
-const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
-
-export const optionsSchema = z.object({
-	/** 
-	 * Optional: Allows the user to change the default theme for the code blocks.
-	 * 
-	 * All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes).
-	 */
-	theme: z.custom<BundledShikiTheme>().optional(),
-  });
-
-export type UserConfig = z.infer<typeof optionsSchema>
-
-/** Astro-Gist - An Astro.js integration for embedding GitHub Gists in your Astro.js project.
- * @example
- * import { defineConfig } from "astro/config";
- * import astroGist from "@matthiesenxyz/astro-gists";
- * 
- * export default defineConfig({
- *   integrations: [ 
- *     astroGist({
- *       // Optional: Change the default theme for the code blocks. 
- *       // Default: `Astro Houston (Custom)` If you want to use the default theme, you can omit this option. 
- *       theme: "github-dark" 
- *     }) 
- *   ]
- * });
+/** 
+ * Astro-Gist - An Astro.js integration for embedding GitHub Gists in your Astro.js project.
 */
 export default defineIntegration({
   name: "@matthiesenxyz/astro-gists",
@@ -51,9 +24,7 @@ export default defineIntegration({
 		watchIntegration(resolve())
 
 		// Check for GITHUB_PERSONAL_TOKEN
-		if (!GITHUB_PERSONAL_TOKEN) {
-			configSetup.warn("GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.")
-		}
+		if (!isThereAToken) {configSetup.warn(TOKEN_MISSING_ERROR)}
 
 		// Add virtual imports
 		addVirtualImports({

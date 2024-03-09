@@ -5,11 +5,20 @@ import type { Route, RequestParameters, OctokitResponse } from "@octokit/types"
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
 
+export const isThereAToken = () => {
+  if (!GITHUB_PERSONAL_TOKEN) {
+    return false;
+  }
+  return true;
+}
+
+export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.";
+
 // Create an Octokit instance
-export const octokit = new Octokit({ auth: GITHUB_PERSONAL_TOKEN });
+const octokit = new Octokit({ auth: GITHUB_PERSONAL_TOKEN });
 
 // Retry requests if rate limited
-async function requestRetry(route: Route, parameters: RequestParameters) {
+export async function requestRetry(route: Route, parameters: RequestParameters) {
   try {
     const response: OctokitResponse<unknown, number> = await octokit.request(route, parameters);
     return response;
@@ -32,32 +41,3 @@ async function requestRetry(route: Route, parameters: RequestParameters) {
       return Promise.reject(error);
   }
 }
-
-// Get a Gist by ID
-export const getGist = async (gistId: string) => {
-  /** @ts-ignore-error */
-  const { data: response } = await requestRetry('GET /gists/{gist_id}', { gist_id: gistId });
-  const data = response as {
-    // biome-ignore lint/suspicious/noExplicitAny: we don't know the shape of the data returned from the API
-files: any; data: unknown 
-};
-  return data;
-};
-
-// Get a file from a Gist by ID and filename
-export const getGistFile = async (
-    gistId: string,
-    filename: string
-    ) => {
-  const gist = await getGist(gistId);
-  if (gist?.files) {
-    const file = gist.files[filename];
-    return file ? file : null;
-  }
-  return null;
-};
-
-export const getGistGroup = async (gistId: string) => { 
-  const gist = await getGist(gistId);
-  return gist;
-};
