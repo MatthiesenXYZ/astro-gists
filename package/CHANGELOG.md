@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.4
+
+### Patch Changes
+
+- a6696ed: Readds a basic version of the theme system for now
+
 ## 0.2.3
 
 ### Patch Changes
