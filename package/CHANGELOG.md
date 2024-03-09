@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.3
+
+### Patch Changes
+
+- fc5ea6d: bug fix, disable theme system for the moment
+
 ## 0.2.2
 
 ### Patch Changes
