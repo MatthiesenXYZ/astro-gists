@@ -16,3 +16,7 @@ updates:
         dependency-type: "development"
     labels:
       - "dependencies"
+    ignore:
+    - dependency-name: hast-util-to-html
+      versions:
+      - ">=9.0.0"
