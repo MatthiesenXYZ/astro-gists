@@ -1,5 +1,14 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.7
+
+### Patch Changes
+
+- 4ce42d9: Bump dependencies:
+
+  - vite from to
+  - astro from to
+
 ## 0.2.6
 
 ### Patch Changes
