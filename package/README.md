@@ -85,9 +85,7 @@ This Utility is meant to display a single Gist as Codeblocks using ExpressiveCod
 
 ```astro
 ---
-import { GetGist } from "@matthiesenxyz/astro-gists/components"
-// OR
-import GetGist from "@matthiesenxyz/astro-gists/GetGist"
+import { GetGist } from "astro-gists:components"
 ---
 <GetGist 
 	gistId="your-gist-id-here"
@@ -101,9 +99,7 @@ This Utility is meant to display an entire collection of Gists by ID
 
 ```astro
 ---
-import { GetGistGroup } from "@matthiesenxyz/astro-gists/components"
-// OR
-import GetGistGroup from "@matthiesenxyz/astro-gists/GetGistGroup"
+import { GetGistGroup } from "astro-gists:components"
 ---
 <GetGistGroup 
 	gistId="your-gist-id-here"

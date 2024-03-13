@@ -29,7 +29,7 @@ const jsModules = await engine.getJsModules();
 const { renderedGroupAst, styles } = await engine.render({
 	language: lang, meta, locale, code,
   parentDocument: {
-    positionInDocument: { groupIndex,},
+    positionInDocument: { groupIndex },
   },
   props, })
 
