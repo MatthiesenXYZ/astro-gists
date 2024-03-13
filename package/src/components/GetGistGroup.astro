@@ -17,8 +17,8 @@ export interface Props {
 
 const { gistId, wrap, showLineNumbers } = Astro.props as Props;
 
-const WRAP = wrap ? wrap : wrap == undefined ? true : false;
-const SLN = showLineNumbers ? showLineNumbers : showLineNumbers == undefined ? true : false;
+const WRAP = wrap ? wrap : wrap === undefined ? true : false;
+const SLN = showLineNumbers ? showLineNumbers : showLineNumbers === undefined ? true : false;
 
 const Gist = await getGistGroup(gistId);
 

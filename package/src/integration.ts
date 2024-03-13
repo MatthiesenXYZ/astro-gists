@@ -2,6 +2,7 @@ import { defineIntegration, createResolver } from "astro-integration-kit"
 import { corePlugins } from "astro-integration-kit/plugins"
 import { isThereAToken, TOKEN_MISSING_ERROR } from "./lib"
 import { optionsSchema } from "./index"
+import { readFileSync } from "node:fs";
 
 /** 
  * Astro-Gist - An Astro.js integration for embedding GitHub Gists in your Astro.js project.
@@ -15,7 +16,7 @@ export default defineIntegration({
 
 	return {
 	  "astro:config:setup": ({ 
-		watchIntegration, addVirtualImports, logger,
+		watchIntegration, addVirtualImports, logger, addDts
 	}) => {
 		logger.info("Setting up Astro Gists Integration.")
 		const configSetup = logger.fork("astro-gists/config:setup")
@@ -29,7 +30,13 @@ export default defineIntegration({
 		// Add virtual imports
 		addVirtualImports({
 			"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
+			"astro-gists:components": `export * from "@matthiesenxyz/astro-gists/components";`
 		});
+
+		addDts({
+			name: "astro-gists",
+			content: readFileSync(resolve("./stubs/astro-gists.d.ts"), "utf-8")
+		})
 
 	  },
 	  "astro:config:done": ({ logger }) => {
