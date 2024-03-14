@@ -99,11 +99,9 @@ export const getGistFile = async (
     filename: string
     ) => {
   const gist = await gistGrabber(gistId);
-  if (gist?.files){
-    const file = gist.files[filename];
-    return file
-  }
-  return null;
+  if (gist === null) return null;
+  if (!gist.files) return null;
+  return gist.files[filename];
 };
 
 // Get a Group of Gist files by ID
