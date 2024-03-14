@@ -3,8 +3,10 @@ export type PageData = {
 	blockGroupIndex: number
 }
 
+// Map of request to page data
 const pageDataMap = new Map<Request, PageData>()
 
+// Get the page data for a request
 export function getPageData(request: Request): PageData {
 	let data = pageDataMap.get(request)
 	if (!data) {

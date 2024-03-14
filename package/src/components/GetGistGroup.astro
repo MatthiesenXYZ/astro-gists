@@ -15,13 +15,17 @@ export interface Props {
     wrap?: boolean;
 }
 
+// extract the props
 const { gistId, wrap, showLineNumbers } = Astro.props as Props;
 
+// set the defaults
 const WRAP = wrap ? wrap : wrap === undefined ? true : false;
 const SLN = showLineNumbers ? showLineNumbers : showLineNumbers === undefined ? true : false;
 
+// get the Gist
 const Gist = await getGistGroup(gistId);
 
+// extract the files
 const files = Gist.files;
 ---
 { Gist && (

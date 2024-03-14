@@ -2,20 +2,42 @@ import { Octokit } from "octokit";
 import type { OctokitResponse } from "@octokit/types";
 import { loadEnv } from "vite";
 import pRretry from 'p-retry';
+import config from "virtual:astro-gists/config";
+
+// Load config options to check if verbose logging is enabled
+const isVerbose = config.verbose;
+
+// Create Gist Logger interface
+const gistLogger = async (
+  type: "info"|"warn"|"error", 
+  message: string,
+  VerboseCheck: boolean
+  ) => {
+    // if checkVerbose is true and isVerbose is true, log the message
+    if (VerboseCheck && isVerbose) {
+      if (type === "info") {
+        console.log(`[astro-gists : octokit] ${message}`);
+      } else if (type === "warn") {
+        console.log(`[WARN] [astro-gists : octokit] ${message}`);
+      } else if (type === "error") {
+        console.log(`[ERROR] [astro-gists : octokit] ${message}`);
+      } 
+    }
+
+    if (!VerboseCheck) {
+      if (type === "info") {
+        console.log(`[astro-gists : octokit]" ${message}`);
+      } else if (type === "warn") {
+        console.log(`[WARN] [astro-gists : octokit] ${message}`);
+      } else if (type === "error") {
+        console.log(`[ERROR] [astro-gists : octokit] ${message}`);
+      }
+    }
+
+  };
 
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
-
-// Check if there is a GitHub Personal Token
-export const isThereAToken = () => {
-  if (!GITHUB_PERSONAL_TOKEN) {
-    return false;
-  }
-  return true;
-}
-
-// Error message if the token is missing
-export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.";
 
 // Create an Octokit instance
 const octokit = new Octokit({ auth: GITHUB_PERSONAL_TOKEN });
@@ -24,9 +46,9 @@ const octokit = new Octokit({ auth: GITHUB_PERSONAL_TOKEN });
 const retry: typeof pRretry = (fn, opts) =>
   pRretry(fn, {
     onFailedAttempt: (e) =>
-      console.log(`[Astro-Gists] Attempt ${e.attemptNumber} failed. There are ${e.retriesLeft} retries left.\n `,
-        e.message
-      ),
+      gistLogger("warn",
+        `Attempt ${e.attemptNumber} failed. There are ${e.retriesLeft} retries left.\n ${e.message}`,
+        false),
       retries: 3,
     ...opts,
   });
@@ -38,20 +60,37 @@ function handleResponse(response: OctokitResponse<any>) {
     case 200:
       return response.data;
     case 404:
-      return "Gist not found.";
+      return "E404";
     case 403:
-      return "You have exceeded the rate limit for requests to the GitHub API. Please try again later.";
+      return "E403";
     case 500:
-      return "An internal server error occurred. Please try again later.";
+      return "E500";
     default:
-      return "An error occurred. Please try again later.";
+      return "E000";
   }
 }
-
 // Gist Grabber
 const gistGrabber = async (gistId: string) => { 
   const response = await retry(() => octokit.request('GET /gists/{gist_id}', { gist_id: gistId }));
-
+  if (handleResponse(response) === "E404") {
+    gistLogger("error", `Gist ${gistId} not found.`, false);
+    return null;
+  }
+  if (handleResponse(response) === "E403") {
+    gistLogger("error", "Rate limit exceeded. Please try again later.", false);
+    return null;
+  }
+  if (handleResponse(response) === "E500") {
+    gistLogger("error", "Internal server error. Please try again later.", false);
+    return null;
+  }
+  if (handleResponse(response) === "E000") {
+    gistLogger("error", "An unknown error occurred. Please try again later.", false);
+    return null;
+  }
+  if (handleResponse(response) === response.data) {
+    gistLogger("info", `Gist ${gistId} found.`, true);
+  }
   return handleResponse(response);
 }
 
