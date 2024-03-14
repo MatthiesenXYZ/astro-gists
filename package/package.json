@@ -1,6 +1,6 @@
 {
   "name": "@matthiesenxyz/astro-gists",
-  "version": "0.2.8",
+  "version": "0.2.9",
   "description": "Allows the user to import GitHub Gists by ID through an Astro Component and Octokit",
   "author": {
     "email": "adam@matthiesen.xyz",
