@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.10
+
+### Patch Changes
+
+- bcc60cb: [Internal] Fix Logger and response types
+
 ## 0.2.9
 
 ### Patch Changes
