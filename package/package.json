@@ -40,12 +40,15 @@
   "peerDependencies": {
     "astro": "^4.4.1"
   },
+  "devDependencies": {
+    "@octokit/types": "^12.6.0"
+  },
   "dependencies": {
     "@expressive-code/plugin-line-numbers": "^0.33.4",
-    "@octokit/types": "^12.6.0",
     "astro-integration-kit": "^0.5.1",
     "expressive-code": "^0.33.4",
     "hast-util-to-html": "8.0.4",
+    "p-retry": "6.2.0",
     "octokit": "^3.1.2",
     "vite": "^5.1.6"
   }

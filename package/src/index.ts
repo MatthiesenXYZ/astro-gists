@@ -14,6 +14,10 @@ export const optionsSchema = z.object({
 	 * All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes).
 	 */
 	theme: z.custom<BundledShikiTheme>().optional(),
-});
+	/**
+	 * Optional: Allows the user to enable verbose logging.
+	 */
+	verbose: z.boolean().default(false),
+}).optional().default({});
 
 export type astroGistsUserConfig = z.infer<typeof optionsSchema>

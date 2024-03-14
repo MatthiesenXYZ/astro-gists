@@ -56,7 +56,9 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
 +  integrations: [astroGist({
 	// Allows you to set the default theme
-	theme: ['catppuccin-macchiato']
+	theme: ['catppuccin-macchiato'],
+	// Allows you to enable verbose logging
+	verbose: false,
 +  })]
 });
 ```

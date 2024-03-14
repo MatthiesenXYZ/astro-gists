@@ -1,43 +1,102 @@
 import { Octokit } from "octokit";
+import type { OctokitResponse } from "@octokit/types";
 import { loadEnv } from "vite";
-import type { Route, RequestParameters, OctokitResponse } from "@octokit/types"
+import pRretry from 'p-retry';
+import config from "virtual:astro-gists/config";
+
+// Load config options to check if verbose logging is enabled
+const isVerbose = config.verbose;
+
+// Create Gist Logger interface
+const gistLogger = async (
+  type: "info"|"warn"|"error", 
+  message: string,
+  VerboseCheck: boolean
+  ) => {
+    // if checkVerbose is true and isVerbose is true, log the message
+    if (!VerboseCheck || VerboseCheck && isVerbose) {
+      if (type === "info") {
+        console.log(`[astro-gists : octokit] ${message}`);
+      } else if (type === "warn") {
+        console.log(`[WARN] [astro-gists : octokit] ${message}`);
+      } else if (type === "error") {
+        console.log(`[ERROR] [astro-gists : octokit] ${message}`);
+      } 
+    }
+  };
 
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
 
-export const isThereAToken = () => {
-  if (!GITHUB_PERSONAL_TOKEN) {
-    return false;
-  }
-  return true;
-}
-
-export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add it to your .env file. Without it, you will be limited to 60 requests per hour.";
-
 // Create an Octokit instance
 const octokit = new Octokit({ auth: GITHUB_PERSONAL_TOKEN });
 
-// Retry requests if rate limited
-export async function requestRetry(route: Route, parameters: RequestParameters) {
-  try {
-    const response: OctokitResponse<unknown, number> = await octokit.request(route, parameters);
-    return response;
-  } catch (error) {
-    /** @ts-ignore-error */
-    if (error.response && error.status === 403 && error.response.headers['x-ratelimit-remaining'] === '0') {
-      /** @ts-ignore-error */
-      const resetTimeEpochSeconds = error.response.headers['x-ratelimit-reset'];
-      const currentTimeEpochSeconds = Math.floor(new Date().getTime() / 1000);
-      const secondsToWait = resetTimeEpochSeconds - currentTimeEpochSeconds;
-      console.log(`Rate limit reached. Waiting ${secondsToWait} seconds before retrying.`);
-      return new Promise((resolve) => {
-        setTimeout(async () => {
-          const retryResponse = await requestRetry(route, parameters);
-          resolve(retryResponse);
-        }, secondsToWait * 1000);
-      });
-    }
-      // Return a rejected Promise
-      return Promise.reject(error);
+// Retry failed requests
+const retry: typeof pRretry = (fn, opts) =>
+  pRretry(fn, {
+    onFailedAttempt: (e) =>
+      gistLogger("warn",
+        `Attempt ${e.attemptNumber} failed. There are ${e.retriesLeft} retries left.\n ${e.message}`,
+        false),
+      retries: 3,
+    ...opts,
+  });
+
+// Handle the response from the Octokit API
+// biome-ignore lint/suspicious/noExplicitAny: any is used to handle the response from the Octokit API
+function getStatusCode(response: OctokitResponse<any>) {
+  switch (response.status) {
+    case 200:
+      return response.data;
+    case 404:
+      return "E404";
+    case 403:
+      return "E403";
+    case 500:
+      return "E500";
+    default:
+      return "E000";
   }
 }
+// Gist Grabber
+const gistGrabber = async (gistId: string) => { 
+  const response = await retry(() => octokit.request('GET /gists/{gist_id}', { gist_id: gistId }));
+  const statusCode = getStatusCode(response);
+
+  if (statusCode === "E404") {
+    gistLogger("error", `Gist ${gistId} not found.`, false);
+    return null;
+  }
+  if (statusCode === "E403") {
+    gistLogger("error", "Rate limit exceeded. Please try again later.", false);
+    return null;
+  }
+  if (statusCode === "E500") {
+    gistLogger("error", "Internal server error. Please try again later.", false);
+    return null;
+  }
+  if (statusCode === "E000") {
+    gistLogger("error", "An unknown error occurred. Please try again later.", false);
+    return null;
+  }
+  if (statusCode === response.data) {
+    gistLogger("info", `Gist ${gistId} found.`, true);
+  }
+  return statusCode;
+}
+
+// Get a file from a Gist by ID and filename
+export const getGistFile = async (
+    gistId: string,
+    filename: string
+    ) => {
+  const gist = await gistGrabber(gistId);
+  const file = gist.files[filename];
+  return file ? file : null;
+};
+
+// Get a Group of Gist files by ID
+export const getGistGroup = async (gistId: string) => { 
+  const gist = await gistGrabber(gistId);
+  return gist;
+};
