@@ -20,7 +20,7 @@ const gistLogger = async (
     // simplify console.log
     const log = console.log;
     // Create a log banner to identify logs from this package
-    const logBanner = chalk.blue("[")+chalk.blue("astro-gists : octokit")+chalk.blue("] ");
+    const logBanner = chalk.blue("[astro-gists : octokit] ");
     // if checkVerbose is true and isVerbose is true, log the message
     if (!VerboseCheck || VerboseCheck && isVerbose) {
       if (type === "info") {
