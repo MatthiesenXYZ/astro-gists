@@ -1,11 +1,15 @@
 import { Octokit } from "octokit";
-import type { OctokitResponse } from "@octokit/types";
+import type { Endpoints } from "@octokit/types";
 import { loadEnv } from "vite";
+import chalk from 'chalk';
 import pRretry from 'p-retry';
 import config from "virtual:astro-gists/config";
 
 // Load config options to check if verbose logging is enabled
 const isVerbose = config.verbose;
+
+// Define the GistResponse type
+type GistResponse = Endpoints["GET /gists/{gist_id}"]["response"];
 
 // Create Gist Logger interface
 const gistLogger = async (
@@ -13,14 +17,18 @@ const gistLogger = async (
   message: string,
   VerboseCheck: boolean
   ) => {
+    // simplify console.log
+    const log = console.log;
+    // Create a log banner to identify logs from this package
+    const logBanner = chalk.blue("[")+chalk.blue("astro-gists : octokit")+chalk.blue("] ");
     // if checkVerbose is true and isVerbose is true, log the message
     if (!VerboseCheck || VerboseCheck && isVerbose) {
       if (type === "info") {
-        console.log(`[astro-gists : octokit] ${message}`);
+        log(logBanner+message);
       } else if (type === "warn") {
-        console.log(`[WARN] [astro-gists : octokit] ${message}`);
+        log(chalk.yellow("[WARN] ")+logBanner+chalk.yellow(message));
       } else if (type === "error") {
-        console.log(`[ERROR] [astro-gists : octokit] ${message}`);
+        log(chalk.bold.red("[ERROR] ")+logBanner+chalk.red(message));
       } 
     }
   };
@@ -43,20 +51,20 @@ const retry: typeof pRretry = (fn, opts) =>
   });
 
 // Handle the response from the Octokit API
-// biome-ignore lint/suspicious/noExplicitAny: any is used to handle the response from the Octokit API
-function getStatusCode(response: OctokitResponse<any>) {
-  switch (response.status) {
-    case 200:
-      return response.data;
-    case 404:
+function getStatusCode(response: GistResponse) {
+  if (response.status !== 200) {
+    if (response.status === 404) {
       return "E404";
-    case 403:
+    }
+    if (response.status === 403) {
       return "E403";
-    case 500:
+    }
+    if (response.status === 500) {
       return "E500";
-    default:
-      return "E000";
+    }
+    return "E000";
   }
+  return response.data;
 }
 // Gist Grabber
 const gistGrabber = async (gistId: string) => { 
@@ -80,7 +88,7 @@ const gistGrabber = async (gistId: string) => {
     return null;
   }
   if (statusCode === response.data) {
-    gistLogger("info", `Gist ${gistId} found.`, true);
+    gistLogger("info", `Gist for "${response.data.description || gistId}" grabbed successfully.`, true);
   }
   return statusCode;
 }
@@ -91,8 +99,11 @@ export const getGistFile = async (
     filename: string
     ) => {
   const gist = await gistGrabber(gistId);
-  const file = gist.files[filename];
-  return file ? file : null;
+  if (gist?.files){
+    const file = gist.files[filename];
+    return file
+  }
+  return null;
 };
 
 // Get a Group of Gist files by ID
