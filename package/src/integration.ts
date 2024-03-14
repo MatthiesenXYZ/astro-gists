@@ -41,7 +41,7 @@ export default defineIntegration({
 		checkVerbose: boolean,
 		) => {
 			// if checkVerbose is true and isVerbose is true, log the message
-			if (checkVerbose && isVerbose) {
+			if (!checkVerbose || checkVerbose && isVerbose) {
 				if (type === "info") {
 					logger.info(message);
 				} else if (type === "warn") {
@@ -50,16 +50,7 @@ export default defineIntegration({
 					logger.error(message);
 				} 
 			}
-			// if checkVerbose is false, force log the message
-			if (!checkVerbose) {
-				if (type === "info") {
-					logger.info(message);
-				} else if (type === "warn") {
-					logger.warn(message);
-				} else if (type === "error") {
-					logger.error(message);
-				} 
-		} };
+		};
 
 	return {
 	  "astro:config:setup": ({ 
@@ -68,49 +59,33 @@ export default defineIntegration({
 
 		// Create a logger for the setup events
 		const configLogger = logger.fork("astro-gists : setup");
+		const configDone = logger.fork("astro-gists : setup-done")
 
-		// Create a verbose logger
-		const verboseLogger = (
-			type: "info"|"warn"|"error", 
-			message:string
-			) => gistLogger(configLogger, type, message, true);
+		gistLogger(configLogger, "info", "Setting up Astro Gists Integration.", false);
 
-		// Create a logger that ignores the verbose check
-		const ignoreVerboseLoggerCheck = (
-			type: "info"|"warn"|"error",
-			message:string
-			) => gistLogger(configLogger, type, message, false);
-
-		ignoreVerboseLoggerCheck("info", "Setting up Astro Gists Integration.");
-
-		verboseLogger("warn","Verbose logging is enabled.")
+		gistLogger(configLogger, "warn", "Verbose logging is enabled.", true);
 
 		// WATCH INTEGRATION FOR CHANGES
 		watchIntegration(resolve())
 
 		// Check for GITHUB_PERSONAL_TOKEN
 		if (!isThereAToken()) {
-			ignoreVerboseLoggerCheck("warn",TOKEN_MISSING_ERROR)
+			gistLogger(configLogger,"error",TOKEN_MISSING_ERROR, false)
 		}
 
 		// Add virtual imports
-		verboseLogger("info", "Adding virtual imports.");
+		gistLogger(configLogger, "info", "Adding virtual imports.", true);
 		addVirtualImports({
 			"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
 			"astro-gists:components": `export * from "@matthiesenxyz/astro-gists/components";`
 		});
 
 		// Add .d.ts file
-		verboseLogger("info", "Injecting astro-gists.d.ts file.");
+		gistLogger(configLogger, "info", "Injecting astro-gists.d.ts file.", true);
 		addDts({
 			name: "astro-gists",
 			content: readFileSync(resolve("./stubs/astro-gists.d.ts"), "utf-8")
 		})
-
-	  },
-	  "astro:config:done": ({ logger }) => {
-		// Create a logger for the config done event
-		const configDone = logger.fork("astro-gists : setup-done")
 
 		// Log that the configuration is complete
 		gistLogger(
@@ -119,44 +94,7 @@ export default defineIntegration({
 			"Configuration for Astro Gists Integration is complete.", 
 			false
 		);
-
 	  },
-	  "astro:server:setup": ({ logger }) => {
-		// Create a logger for the server setup event
-		const serverSetup = logger.fork("astro-gists : dev")
-
-		// Log that the server is being set up
-		gistLogger(
-			serverSetup,
-			"info",
-			"Setting up Astro Gists Integration for development.",
-			true
-		);
-	  },
-	  "astro:build:start": ({ logger }) => {
-		// Create a logger for the build start event
-		const buildStart = logger.fork("astro-gists : build")
-
-		// Log that the build is starting
-		gistLogger(
-			buildStart,
-			"info",
-			"Starting Build for Astro Gists Integration.",
-			true
-		);
-	  },
-	  "astro:build:done": ({ logger }) => {
-		// Create a logger for the build done event
-		const buildDone = logger.fork("astro-gists : done")
-
-		// Log that the build is complete
-		gistLogger(
-			buildDone,
-			"info",
-			"Build for Astro Gists Integration is complete.",
-			true
-		);
-	  }
 	}
   }
 })

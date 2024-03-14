@@ -14,7 +14,7 @@ const gistLogger = async (
   VerboseCheck: boolean
   ) => {
     // if checkVerbose is true and isVerbose is true, log the message
-    if (VerboseCheck && isVerbose) {
+    if (!VerboseCheck || VerboseCheck && isVerbose) {
       if (type === "info") {
         console.log(`[astro-gists : octokit] ${message}`);
       } else if (type === "warn") {
@@ -23,17 +23,6 @@ const gistLogger = async (
         console.log(`[ERROR] [astro-gists : octokit] ${message}`);
       } 
     }
-
-    if (!VerboseCheck) {
-      if (type === "info") {
-        console.log(`[astro-gists : octokit]" ${message}`);
-      } else if (type === "warn") {
-        console.log(`[WARN] [astro-gists : octokit] ${message}`);
-      } else if (type === "error") {
-        console.log(`[ERROR] [astro-gists : octokit] ${message}`);
-      }
-    }
-
   };
 
 // Load environment variables
@@ -55,7 +44,7 @@ const retry: typeof pRretry = (fn, opts) =>
 
 // Handle the response from the Octokit API
 // biome-ignore lint/suspicious/noExplicitAny: any is used to handle the response from the Octokit API
-function handleResponse(response: OctokitResponse<any>) {
+function getStatusCode(response: OctokitResponse<any>) {
   switch (response.status) {
     case 200:
       return response.data;
@@ -72,26 +61,28 @@ function handleResponse(response: OctokitResponse<any>) {
 // Gist Grabber
 const gistGrabber = async (gistId: string) => { 
   const response = await retry(() => octokit.request('GET /gists/{gist_id}', { gist_id: gistId }));
-  if (handleResponse(response) === "E404") {
+  const statusCode = getStatusCode(response);
+
+  if (statusCode === "E404") {
     gistLogger("error", `Gist ${gistId} not found.`, false);
     return null;
   }
-  if (handleResponse(response) === "E403") {
+  if (statusCode === "E403") {
     gistLogger("error", "Rate limit exceeded. Please try again later.", false);
     return null;
   }
-  if (handleResponse(response) === "E500") {
+  if (statusCode === "E500") {
     gistLogger("error", "Internal server error. Please try again later.", false);
     return null;
   }
-  if (handleResponse(response) === "E000") {
+  if (statusCode === "E000") {
     gistLogger("error", "An unknown error occurred. Please try again later.", false);
     return null;
   }
-  if (handleResponse(response) === response.data) {
+  if (statusCode === response.data) {
     gistLogger("info", `Gist ${gistId} found.`, true);
   }
-  return handleResponse(response);
+  return statusCode;
 }
 
 // Get a file from a Gist by ID and filename

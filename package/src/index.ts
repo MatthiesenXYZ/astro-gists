@@ -17,7 +17,7 @@ export const optionsSchema = z.object({
 	/**
 	 * Optional: Allows the user to enable verbose logging.
 	 */
-	verbose: z.boolean().optional(),
+	verbose: z.boolean().default(false),
 }).optional().default({});
 
 export type astroGistsUserConfig = z.infer<typeof optionsSchema>

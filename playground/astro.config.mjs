@@ -4,6 +4,6 @@ import mdx from "@astrojs/mdx"
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [astroGist(), mdx()]
+  integrations: [astroGist({ verbose: true }), mdx()]
 });
 
