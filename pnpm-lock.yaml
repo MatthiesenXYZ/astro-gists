@@ -18,20 +18,20 @@ importers:
   package:
     dependencies:
       '@expressive-code/plugin-line-numbers':
-        specifier: ^0.33.4
-        version: 0.33.4
+        specifier: ^0.33.5
+        version: 0.33.5
       astro:
         specifier: ^4.4.1
         version: 4.4.11
       astro-integration-kit:
-        specifier: ^0.5.1
-        version: 0.5.1(astro@4.4.11)
+        specifier: ^0.6.0
+        version: 0.6.0(astro@4.4.11)
       chalk:
         specifier: 5.3.0
         version: 5.3.0
       expressive-code:
-        specifier: ^0.33.4
-        version: 0.33.4
+        specifier: ^0.33.5
+        version: 0.33.5
       hast-util-to-html:
         specifier: 8.0.4
         version: 8.0.4
@@ -55,15 +55,15 @@ importers:
         specifier: '*'
         version: link:../package
       astro:
-        specifier: ^4.5.0
-        version: 4.5.0(@types/node@20.11.25)(typescript@5.4.2)
+        specifier: ^4.5.5
+        version: 4.5.5(@types/node@20.11.25)(typescript@5.4.2)
     devDependencies:
       '@astrojs/check':
         specifier: ^0.5.7
         version: 0.5.7(typescript@5.4.2)
       '@astrojs/mdx':
         specifier: ^2.2.0
-        version: 2.2.0(astro@4.5.0)
+        version: 2.2.0(astro@4.5.5)
       '@types/node':
         specifier: ^20.11.25
         version: 20.11.25
@@ -188,7 +188,7 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /@astrojs/mdx@2.2.0(astro@4.5.0):
+  /@astrojs/mdx@2.2.0(astro@4.5.5):
     resolution: {integrity: sha512-EkcCniYdGwsh9k5LknqRrz/UyOnMNXdRk7fgDAw/zUDKnm7zgQAG8hIx0FxG1L2IINxLfu7IcjgZb3f5TFpxKw==}
     engines: {node: '>=18.14.1'}
     peerDependencies:
@@ -197,7 +197,7 @@ packages:
       '@astrojs/markdown-remark': 4.3.0
       '@mdx-js/mdx': 3.0.1
       acorn: 8.11.3
-      astro: 4.5.0(@types/node@20.11.25)(typescript@5.4.2)
+      astro: 4.5.5(@types/node@20.11.25)(typescript@5.4.2)
       es-module-lexer: 1.4.1
       estree-util-visit: 2.0.0
       github-slugger: 2.0.0
@@ -919,8 +919,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@expressive-code/core@0.33.4:
-    resolution: {integrity: sha512-IywACrwcR/7cIPBQ1qG/RsgvNp85/CAX6okxR0Niztrd7rh4IcEhAsz51jX/NPNnhU9yPynTT+mLdM1URqrnvw==}
+  /@expressive-code/core@0.33.5:
+    resolution: {integrity: sha512-KL0EkKAvd7SSIQL3ZIP19xqe4xNjBaQYNvcJC6RmoBUnQpvxaJNFwRxCBEF/X0ftJEMaSG7WTrabZ9c/zFeqmA==}
     dependencies:
       '@ctrl/tinycolor': 3.6.1
       hast-util-to-html: 8.0.4
@@ -929,31 +929,31 @@ packages:
       postcss-nested: 6.0.1(postcss@8.4.35)
     dev: false
 
-  /@expressive-code/plugin-frames@0.33.4:
-    resolution: {integrity: sha512-6HE5f8dAPjzmhs7yZJHVyH+w/UwVpktjlTvrUumrytHo6hidGlkB5lptWJlSAd9JXzev5BQEb4xrqQ0xQqO5+A==}
+  /@expressive-code/plugin-frames@0.33.5:
+    resolution: {integrity: sha512-lFt/gbnZscBSxHovg4XiWohp5nrxk4McS6RGABdj6+0gJcX8/YrFTM23GKBIkaDePxdDidVY0jQYGYDL/RrQHw==}
     dependencies:
-      '@expressive-code/core': 0.33.4
+      '@expressive-code/core': 0.33.5
       hastscript: 7.2.0
     dev: false
 
-  /@expressive-code/plugin-line-numbers@0.33.4:
-    resolution: {integrity: sha512-+AIxeufcutV1+0sAtXsTEcma7uxKQK2F7qfQYWHYp0PW6QxLXkMYP7aGfuIFPsfovKEe+EmFKXKhEwYnraK7yQ==}
+  /@expressive-code/plugin-line-numbers@0.33.5:
+    resolution: {integrity: sha512-jGHorejNS7tj/FPKwLqV5PCAai43ydlxVQUW4kO8g+/6f0BqkJGD0JaIylOnSD3MWmQXaOFs9a7FEJHn0EZvBQ==}
     dependencies:
-      '@expressive-code/core': 0.33.4
+      '@expressive-code/core': 0.33.5
       hastscript: 7.2.0
     dev: false
 
-  /@expressive-code/plugin-shiki@0.33.4:
-    resolution: {integrity: sha512-XnDchHqCGk046hgQnu83t9+SDrRjsvpvUEBiI0wl4RljVDr1E0yllx0y6C1yEuKfFfasib6BxX/PkItgQdi/0Q==}
+  /@expressive-code/plugin-shiki@0.33.5:
+    resolution: {integrity: sha512-LWgttQTUrIPE1X+Lya1qFWiX47tH2AS2hkbj/cZoWkdiSjn6zUvtTypK/2Xn6Rgn6z6ClzpgHvkXRqFn7nAB4A==}
     dependencies:
-      '@expressive-code/core': 0.33.4
+      '@expressive-code/core': 0.33.5
       shiki: 1.1.7
     dev: false
 
-  /@expressive-code/plugin-text-markers@0.33.4:
-    resolution: {integrity: sha512-hl3E+8iZJMYGDaKsN4bOPOEBb9QeFjg+zQkOJRtjJgsmIYmaZpoQTzTg/JMduE8PLNsD30nAMwG/AbjN/klwZQ==}
+  /@expressive-code/plugin-text-markers@0.33.5:
+    resolution: {integrity: sha512-JxSHL1MGrJAPNaUMjFXex3K+9NJDbfew9H6PmX8LQ+fm9VNQdtBYTAz/x7nqOk7bkTrtAZK5RfDqUfb8U5M+2A==}
     dependencies:
-      '@expressive-code/core': 0.33.4
+      '@expressive-code/core': 0.33.5
       hastscript: 7.2.0
       unist-util-visit-parents: 5.1.3
     dev: false
@@ -1723,8 +1723,8 @@ packages:
     hasBin: true
     dev: true
 
-  /astro-integration-kit@0.5.1(astro@4.4.11):
-    resolution: {integrity: sha512-ef309UUNOjxUe0jjsDP5O3p+jkt53HAcrKOsWJ2NIgdUTOp5P/YKnAjbatfyu3bAuLFDfj5xhXm/rrwSe9d/hw==}
+  /astro-integration-kit@0.6.0(astro@4.4.11):
+    resolution: {integrity: sha512-BCURops+Is7pRemMG2jo3f8WJRDUBS4mvIeReSDsgAlqep6Rknva9i5vpP5OSs6BLy3nx+nWlCzTQTB/c9hZyg==}
     peerDependencies:
       '@vitejs/plugin-react': ^4.2.1
       astro: ^4.4.1
@@ -1835,8 +1835,8 @@ packages:
       - typescript
     dev: false
 
-  /astro@4.5.0(@types/node@20.11.25)(typescript@5.4.2):
-    resolution: {integrity: sha512-NyBePQs0MqsLLde2hOuZO6eiLY2SzpDDeDQDfx39r2Ho2wmlaRFiWxIvcI5vAw75UNVUQuLWRDe+ZNl29AossQ==}
+  /astro@4.5.5(@types/node@20.11.25)(typescript@5.4.2):
+    resolution: {integrity: sha512-gZ3jR06dLmY9/SMkKMr+3pRSrUjhuwjnXt+9abFJV3WGwhCnLZbSNsTBrLMsaFHpAS1ReJChcTWyKRCvs/jCIQ==}
     engines: {node: '>=18.14.1', npm: '>=6.14.0'}
     hasBin: true
     dependencies:
@@ -1850,7 +1850,6 @@ packages:
       '@babel/plugin-transform-react-jsx': 7.23.4(@babel/core@7.23.9)
       '@babel/traverse': 7.23.9
       '@babel/types': 7.23.9
-      '@shikijs/core': 1.1.7
       '@types/babel__core': 7.20.5
       acorn: 8.11.3
       aria-query: 5.3.0
@@ -1881,7 +1880,6 @@ packages:
       js-yaml: 4.1.0
       kleur: 4.1.5
       magic-string: 0.30.7
-      mdast-util-to-hast: 13.0.2
       mime: 3.0.0
       ora: 7.0.1
       p-limit: 5.0.0
@@ -1942,8 +1940,8 @@ packages:
     requiresBuild: true
     optional: true
 
-  /bare-fs@2.2.1:
-    resolution: {integrity: sha512-+CjmZANQDFZWy4PGbVdmALIwmt33aJg8qTkVjClU6X4WmZkTPBDxRHiBn7fpqEWEfF3AC2io++erpViAIQbSjg==}
+  /bare-fs@2.2.2:
+    resolution: {integrity: sha512-X9IqgvyB0/VA5OZJyb5ZstoN62AzD7YxVGog13kkfYWYqJYcK0kcqLZ6TrmH5qr4/8//ejVcX4x/a0UvaogXmA==}
     requiresBuild: true
     dependencies:
       bare-events: 2.2.0
@@ -2667,13 +2665,13 @@ packages:
     requiresBuild: true
     optional: true
 
-  /expressive-code@0.33.4:
-    resolution: {integrity: sha512-vb6DLHjG+jbLJGTvOUhxagsru7oUiBrQEsL9+hcWJvlxIqQ5mRFqjamQS9kCIhXXbfYWiYI7/wfTGxQxuHxsZQ==}
+  /expressive-code@0.33.5:
+    resolution: {integrity: sha512-UPg2jSvZEfXPiCa4MKtMoMQ5Hwiv7In5/LSCa/ukhjzZqPO48iVsCcEBgXWEUmEAQ02P0z00/xFfBmVnUKH+Zw==}
     dependencies:
-      '@expressive-code/core': 0.33.4
-      '@expressive-code/plugin-frames': 0.33.4
-      '@expressive-code/plugin-shiki': 0.33.4
-      '@expressive-code/plugin-text-markers': 0.33.4
+      '@expressive-code/core': 0.33.5
+      '@expressive-code/plugin-frames': 0.33.5
+      '@expressive-code/plugin-shiki': 0.33.5
+      '@expressive-code/plugin-text-markers': 0.33.5
     dev: false
 
   /extend-shallow@2.0.1:
@@ -5306,7 +5304,7 @@ packages:
       pump: 3.0.0
       tar-stream: 3.1.7
     optionalDependencies:
-      bare-fs: 2.2.1
+      bare-fs: 2.2.2
       bare-path: 2.1.0
     optional: true
 
