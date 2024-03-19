@@ -1,5 +1,16 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.11
+
+### Patch Changes
+
+- 39f03af: Bump dependencies:
+
+  - @expressive-code/plugin-line-numbers from to
+  - astro-integration-kit from to
+  - expressive-code from to
+  - astro from to
+
 ## 0.2.10
 
 ### Patch Changes
