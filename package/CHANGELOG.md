@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.12
+
+### Patch Changes
+
+- 53ce8a0: [internal] update AIK to latest version
+
 ## 0.2.11
 
 ### Patch Changes
