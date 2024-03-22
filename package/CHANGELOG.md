@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.13
+
+### Patch Changes
+
+- 746fe4a: improve internal functions and error handling
+
 ## 0.2.12
 
 ### Patch Changes
