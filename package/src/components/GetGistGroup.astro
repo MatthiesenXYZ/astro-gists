@@ -25,13 +25,41 @@ const SLN = showLineNumbers ? showLineNumbers : showLineNumbers === undefined ? 
 // get the Gist
 const Gist = await getGistGroup(gistId);
 
-// extract the files
-const files = Gist.files;
+// Define the GistResponse type
+type GistFile = {
+    filename: string;
+    type: string;
+    language: string;
+    raw_url: string;
+    size: number;
+    content: string;
+};
+
+type GistFiles = {
+    [key: string]: GistFile
+};
+
+let files = {} as GistFiles;
+
+let noGist: boolean
+
+if (Gist) {
+    noGist = false;
+    files = Gist.files as GistFiles;
+} else {
+    noGist = true;
+}
+
 ---
-{ Gist && (
+{ noGist && (
+    <div>
+        <h1>Sorry, the Gist with ID: {gistId} was not found</h1>
+    </div>
+) }
+{ !noGist && (
     <div>
         {Object.keys(files).map((file) => {
-            const { content, filename, language, raw_url } = files[file];
+            const { content, filename, language, raw_url } = files[file] as GistFile;
             return (
                 <Code
                     title={filename} wrap={WRAP}

@@ -1,6 +1,6 @@
 import { defineIntegration, createResolver } from "astro-integration-kit"
 import { corePlugins } from "astro-integration-kit/plugins"
-import type { astroGistsUserConfig } from "./index"
+import type { astroGistsUserConfig } from "./UserConfigSchema"
 import { readFileSync } from "node:fs";
 import type { AstroIntegrationLogger } from "astro";
 import { loadEnv } from "vite";

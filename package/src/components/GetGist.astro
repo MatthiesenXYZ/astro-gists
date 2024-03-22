@@ -25,14 +25,19 @@ const WRAP = wrap ? wrap : wrap === undefined ? true : false;
 const SLN = showLineNumbers ? showLineNumbers : showLineNumbers === undefined ? true : false;
 
 // Fetching the Gist
-const Gist = await getGistFile( gistId, filename);
+const Gist = await getGistFile( gistId, filename );
 
 ---
-{ Gist && 
+{ Gist ? (
 	<Code
         wrap={WRAP} showLineNumbers={SLN}
         title={Gist.filename} raw_url={Gist.raw_url}
         code={ Gist.content ?  Gist.content : "" } 
 		lang={Gist.language ? Gist.language.toLowerCase() : undefined } 
-	/>
+	/> ) : (
+        <div>
+            <h1>Sorry, the Gist with ID: {gistId} was not found</h1>
+        </div>
+    )
+
 }
