@@ -1,9 +1,10 @@
 import { defineIntegration, createResolver } from "astro-integration-kit"
 import { corePlugins } from "astro-integration-kit/plugins"
-import { optionsSchema } from "./index"
+import type { astroGistsUserConfig } from "./index"
 import { readFileSync } from "node:fs";
 import type { AstroIntegrationLogger } from "astro";
 import { loadEnv } from "vite";
+import { z } from "astro/zod";
 
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
@@ -24,7 +25,7 @@ export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add 
 */
 export default defineIntegration({
   name: "@matthiesenxyz/astro-gists",
-  optionsSchema,
+  optionsSchema: z.custom<astroGistsUserConfig>().optional().default({ verbose: false }),
   plugins: [...corePlugins],
   setup({ options }) {
 	// Create resolve helper
