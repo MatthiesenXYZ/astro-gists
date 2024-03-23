@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.2.14
+
+### Patch Changes
+
+- cb41845: set dependency version for AIK
+
 ## 0.2.13
 
 ### Patch Changes
