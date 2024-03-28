@@ -11,8 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@matthiesenxyz/astro-gists": "*",
-    "astro": "^4.5.9"
+    "astro": "^4.5.9",
+    "@matthiesenxyz/astro-gists": "workspace:*"
   },
   "devDependencies": {
     "@astrojs/mdx": "^2.2.1",

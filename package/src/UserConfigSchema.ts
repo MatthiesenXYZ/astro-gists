@@ -1,15 +1,17 @@
 // Export the user config schema
 import { z } from "astro/zod";
-import type { BundledShikiTheme } from "expressive-code";
+import type { BundledShikiTheme } from "./ExpressiveCode/engine";
 
 export const optionsSchema = z.object({
 	/** 
 	 * Optional: Allows the user to change the default theme for the code blocks. 
-	 * @example ['github-dark']
+	 * @example ['github-light','github-dark']
+	 * @example 'github-light'
 	 * 
-	 * All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes).
+	 * @see All available themes are listed in the [Shiki documentation](https://shiki.matsu.io/docs/themes)
+	 * 
 	 */
-	theme: z.custom<BundledShikiTheme>().optional(),
+	themes: z.custom<BundledShikiTheme[]|BundledShikiTheme>().optional(),
 	/**
 	 * Optional: Allows the user to enable verbose logging.
 	 */
