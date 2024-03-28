@@ -27,5 +27,5 @@ if (userThemes) {
 }
 
 // Create a custom instance of ExpressiveCode
-export const engine = new ExpressiveCode({ themes })
+export const engine = new ExpressiveCode({ themes: userThemes?.length ? themes : undefined })
 
