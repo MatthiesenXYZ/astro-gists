@@ -11,7 +11,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@matthiesenxyz/astro-gists": "*",
+    "@matthiesenxyz/astro-gists": "workspace:*",
     "astro": "^4.5.6"
   },
   "devDependencies": {
