@@ -1,6 +1,6 @@
 // Export the user config schema
 import { z } from "astro/zod";
-import type { BundledShikiTheme } from "./ExpressiveCode/engine";
+import type { BundledShikiTheme } from "../ExpressiveCode/engine";
 
 export const optionsSchema = z.object({
 	/** 
