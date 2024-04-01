@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.3.1
+
+### Patch Changes
+
+- 53c47a2: [Internal] Upgrade `AIK` from 0.7.0 to 0.8.0
+
 ## 0.3.0
 
 ### Minor Changes
