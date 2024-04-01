@@ -1,10 +1,9 @@
-import { defineIntegration, createResolver } from "astro-integration-kit"
-import { corePlugins } from "astro-integration-kit/plugins"
-import type { astroGistsUserConfig } from "./UserConfigSchema"
-import { readFileSync } from "node:fs";
-import type { AstroIntegrationLogger } from "astro";
+import { defineIntegration, addDts, addVirtualImports } from "astro-integration-kit";
+import type { astroGistsUserConfig } from "./schemas/UserConfigSchema";
 import { loadEnv } from "vite";
 import { z } from "astro/zod";
+import { gistLogger } from "./lib/integrationLogger";
+import { fileFactory } from "./lib/file-factory";
 
 // Load environment variables
 const { GITHUB_PERSONAL_TOKEN } = loadEnv("all", process.cwd(), "GITHUB_");
@@ -26,71 +25,58 @@ export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add 
 export default defineIntegration({
   name: "@matthiesenxyz/astro-gists",
   optionsSchema: z.custom<astroGistsUserConfig>().optional().default({ verbose: false }),
-  plugins: [...corePlugins],
-  setup({ options }) {
-	// Create resolve helper
-	const { resolve } = createResolver(import.meta.url);
-
-	// Check if verbose logging is enabled
-	const isVerbose = options.verbose;
-	
-	// Create Gist Logger interface
-	const gistLogger = async (
-		logger: AstroIntegrationLogger, 
-		type: "info"|"warn"|"error", 
-		message: string,
-		checkVerbose: boolean,
-		) => {
-			// if checkVerbose is true and isVerbose is true, log the message
-			if (!checkVerbose || checkVerbose && isVerbose) {
-				if (type === "info") {
-					logger.info(message);
-				} else if (type === "warn") {
-					logger.warn(message);
-				} else if (type === "error") {
-					logger.error(message);
-				} 
-			}
-		};
-
+  setup({ 
+	name,
+	options,
+	options: { verbose: isVerbose } 
+}) {
 	return {
-	  "astro:config:setup": ({ 
-		watchIntegration, addVirtualImports, logger, addDts
-	}) => {
+	  "astro:config:setup": ( params ) => {
+
+		const { logger } = params;
 
 		// Create a logger for the setup events
 		const configLogger = logger.fork("astro-gists : setup");
 		const configDone = logger.fork("astro-gists : setup-done")
 
-		gistLogger(configLogger, "info", "Setting up Astro Gists Integration.", false);
+		gistLogger(configLogger, isVerbose, "info", "Setting up Astro Gists Integration.", false);
 
-		gistLogger(configLogger, "warn", "Verbose logging is enabled.", true);
-
-		// WATCH INTEGRATION FOR CHANGES
-		watchIntegration(resolve())
+		gistLogger(configLogger, isVerbose, "warn", "Verbose logging is enabled.", true);
 
 		// Check for GITHUB_PERSONAL_TOKEN
 		if (!isThereAToken()) {
-			gistLogger(configLogger,"error",TOKEN_MISSING_ERROR, false)
+			gistLogger(configLogger, isVerbose, "error",TOKEN_MISSING_ERROR, false)
 		}
 
 		// Add virtual imports
-		gistLogger(configLogger, "info", "Adding virtual imports.", true);
-		addVirtualImports({
+		gistLogger(configLogger, isVerbose,  "info", "Adding virtual imports.", true);
+		addVirtualImports(params, {
+			name,
+			imports: {
 			"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
 			"astro-gists:components": `export * from "@matthiesenxyz/astro-gists/components";`
-		});
+		}});
 
 		// Add .d.ts file
-		gistLogger(configLogger, "info", "Injecting astro-gists.d.ts file.", true);
-		addDts({
+		gistLogger(configLogger, isVerbose,  "info", "Injecting astro-gists.d.ts file.", true);
+
+		const gistsDTS = fileFactory();
+
+		gistsDTS.addLines(`
+			declare module "astro-gists:components" {
+				export * from "@matthiesenxyz/astro-gists/components";
+			}
+		`)
+
+		addDts(params, {
 			name: "astro-gists",
-			content: readFileSync(resolve("./stubs/astro-gists.d.ts"), "utf-8")
+			content: gistsDTS.text()
 		})
 
 		// Log that the configuration is complete
 		gistLogger(
 			configDone, 
+			isVerbose, 
 			"info", 
 			"Configuration for Astro Gists Integration is complete.", 
 			false
