@@ -44,7 +44,7 @@
     "astro": ">=4.4.1"
   },
   "devDependencies": {
-    "@octokit/types": "^12.6.0"
+    "@octokit/types": "^13.4.1"
   },
   "dependencies": {
     "@expressive-code/core": "^0.33.5",
