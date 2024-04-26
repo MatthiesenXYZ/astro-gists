@@ -1,5 +1,11 @@
 # @matthiesenxyz/astro-gists
 
+## 0.3.2
+
+### Patch Changes
+
+- c968b37: update dependencies
+
 ## 0.3.1
 
 ### Patch Changes
