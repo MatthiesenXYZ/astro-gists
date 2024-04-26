@@ -25,63 +25,62 @@ export const TOKEN_MISSING_ERROR = "GITHUB_PERSONAL_TOKEN not found. Please add 
 export default defineIntegration({
   name: "@matthiesenxyz/astro-gists",
   optionsSchema: z.custom<astroGistsUserConfig>().optional().default({ verbose: false }),
-  setup({ 
-	name,
-	options,
-	options: { verbose: isVerbose } 
-}) {
+  setup({ name, options }) {
 	return {
-	  "astro:config:setup": ( params ) => {
+		hooks: {
+			"astro:config:setup": ( params ) => {
 
-		const { logger } = params;
-
-		// Create a logger for the setup events
-		const configLogger = logger.fork("astro-gists : setup");
-		const configDone = logger.fork("astro-gists : setup-done")
-
-		gistLogger(configLogger, isVerbose, "info", "Setting up Astro Gists Integration.", false);
-
-		gistLogger(configLogger, isVerbose, "warn", "Verbose logging is enabled.", true);
-
-		// Check for GITHUB_PERSONAL_TOKEN
-		if (!isThereAToken()) {
-			gistLogger(configLogger, isVerbose, "error",TOKEN_MISSING_ERROR, false)
+				const { verbose } = options;
+				const { logger } = params;
+		
+				// Create a logger for the setup events
+				const configLogger = logger.fork("astro-gists : setup");
+				const configDone = logger.fork("astro-gists : setup-done")
+		
+				gistLogger(configLogger, verbose, "info", "Setting up Astro Gists Integration.", false);
+		
+				gistLogger(configLogger, verbose, "warn", "Verbose logging is enabled.", true);
+		
+				// Check for GITHUB_PERSONAL_TOKEN
+				if (!isThereAToken()) {
+					gistLogger(configLogger, verbose, "error",TOKEN_MISSING_ERROR, false)
+				}
+		
+				// Add virtual imports
+				gistLogger(configLogger, verbose,  "info", "Adding virtual imports.", true);
+				addVirtualImports(params, {
+					name,
+					imports: {
+					"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
+					"astro-gists:components": `export * from "@matthiesenxyz/astro-gists/components";`
+				}});
+		
+				// Add .d.ts file
+				gistLogger(configLogger, verbose,  "info", "Injecting astro-gists.d.ts file.", true);
+		
+				const gistsDTS = fileFactory();
+		
+				gistsDTS.addLines(`
+					declare module "astro-gists:components" {
+						export * from "@matthiesenxyz/astro-gists/components";
+					}
+				`)
+		
+				addDts(params, {
+					name: "astro-gists",
+					content: gistsDTS.text()
+				})
+		
+				// Log that the configuration is complete
+				gistLogger(
+					configDone, 
+					verbose, 
+					"info", 
+					"Configuration for Astro Gists Integration is complete.", 
+					false
+				);
+		  	},
 		}
-
-		// Add virtual imports
-		gistLogger(configLogger, isVerbose,  "info", "Adding virtual imports.", true);
-		addVirtualImports(params, {
-			name,
-			imports: {
-			"virtual:astro-gists/config": `export default ${JSON.stringify(options)}`,
-			"astro-gists:components": `export * from "@matthiesenxyz/astro-gists/components";`
-		}});
-
-		// Add .d.ts file
-		gistLogger(configLogger, isVerbose,  "info", "Injecting astro-gists.d.ts file.", true);
-
-		const gistsDTS = fileFactory();
-
-		gistsDTS.addLines(`
-			declare module "astro-gists:components" {
-				export * from "@matthiesenxyz/astro-gists/components";
-			}
-		`)
-
-		addDts(params, {
-			name: "astro-gists",
-			content: gistsDTS.text()
-		})
-
-		// Log that the configuration is complete
-		gistLogger(
-			configDone, 
-			isVerbose, 
-			"info", 
-			"Configuration for Astro Gists Integration is complete.", 
-			false
-		);
-	  },
 	}
   }
 })
